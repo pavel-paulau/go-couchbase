@@ -148,6 +148,13 @@ type Pool struct {
 	client Client
 }
 
+// StatsURI is a collection of REST API endpoints related to the bucket stats.
+type StatsURI struct {
+	URI              string `json:"uri"`
+	DirectoryURI     string `json:"directoryURI"`
+	NodeStatsListURI string `json:"nodeStatsListURI"`
+}
+
 // VBucketServerMap is the a mapping of vbuckets to nodes.
 type VBucketServerMap struct {
 	HashAlgorithm string   `json:"hashAlgorithm"`
@@ -187,6 +194,7 @@ type Bucket struct {
 	DDocs               struct {
 		URI string `json:"uri"`
 	} `json:"ddocs,omitempty"`
+	Stats       StatsURI               `json:"stats"`
 	BasicStats  map[string]interface{} `json:"basicStats,omitempty"`
 	Controllers map[string]interface{} `json:"controllers,omitempty"`
 

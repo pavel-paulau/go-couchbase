@@ -189,6 +189,32 @@ func (b *Bucket) GatherStats(which string) map[string]GatheredStats {
 	return rv
 }
 
+type HotKey struct {
+	Name string  `json:"name"`
+	Ops  float64 `json:"ops"`
+}
+
+// GlobalStats is a mapping for periodic bucket stats.
+type GlobalStats struct {
+	OP struct {
+		Samples      map[string][]interface{} `json:"samples"`
+		SamplesCount int64                    `json:"samplesCount"`
+		IsPersistent bool                     `json:"isPersistent"`
+		LastTStamp   int64                    `json:"lastTStamp"`
+		Interval     int                      `json:"interval"`
+	} `json:"op"`
+	HotKeys []HotKey `json:"hot_keys"`
+}
+
+// GetGlobalStats returns global (cluster-wide) bucket stats.
+func (b *Bucket) GetGlobalStats() (GlobalStats, error) {
+	stats := GlobalStats{}
+
+	err := b.parseURLResponse(b.Stats.URI, &stats)
+
+	return stats, err
+}
+
 func isAuthError(err error) bool {
 	estr := err.Error()
 	return strings.Contains(estr, "Auth failure")
